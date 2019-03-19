@@ -10,6 +10,7 @@ from mxw.models import wheel, User, Goods, Cart
 
 def home(request):
     wheels = wheel.objects.all()
+    goods_list = Goods.objects.all()
 
     token = request.session.get('token')
     userid = cache.get(token)
@@ -19,54 +20,79 @@ def home(request):
 
     response_dir = {
         'wheels': wheels,
-        'user':user
+        'user':user,
+        'goods_list': goods_list,
     }
 
     return render(request,'home/index.html',context=response_dir)
 
 
 def cart(request):
-    # 商品
-    goodsid = request.GET.get('goodsid')
-    goods = Goods.objects.get(pk=goodsid)
-
-    # 用户
+    # token = request.session.get('token')
+    # userid = cache.get(token)
+    # user = None
+    # if token:
+    #     user = User.objects.get(pk=userid)
+    #
+    # carts = Cart.objects.all()
+    # response_dir = {
+    #     'carts':carts,
+    #     'user': user
+    # }
+    #
+    #
+    # return render(request,'cart/cart.html',context=response_dir)
     token = request.session.get('token')
     userid = cache.get(token)
-    user = User.objects.get(pk=userid)
-
-    # 获取对应的购物车信息
-    cart = Cart.objects.filter(user=user).filter(goods=goods).first()
-    cart.number = cart.number - 1
-    cart.save()
-
-    if token:
+    if userid:  # 有登录才显示
         user = User.objects.get(pk=userid)
+        carts = user.cart_set.filter(number__gt=0)
 
-    response_data = {
-        'status': 1,
-        'number': cart.number
-    }
+        isall = True
+        for cart in carts:
+            if not cart.isselect:
+                isall = False
+
+        response_dir= {
+            'carts': carts,
+            'isall': isall,
+            'user':user,
+        }
+
+        return render(request, 'cart/cart.html', context=response_dir)
+    else:  # 未登录不显示
+        return render(request, 'login/login.html')
 
 
-    return JsonResponse(response_data)
-
-
-def goods_des(request):
-    goods = Goods.objects.all()
-
+def goods_des(request, productid):
+    # goods = Goods.objects.all()
+    #
+    # token = request.session.get('token')
+    # userid = cache.get(token)
+    # user = None
+    # if token:
+    #     user = User.objects.get(pk=userid)
+    #
+    # response_dir = {
+    #     'user': user,
+    #     'goods':goods
+    # }
+    #
+    # return render(request, 'goods_des/goods_des.html', context=response_dir)
     token = request.session.get('token')
     userid = cache.get(token)
+    goods_list = Goods.objects.filter(pk=productid)
+    goods = goods_list.first()
+    detail_data = {
+        'goods': goods,
+        'user': userid,
+    }
     user = None
     if token:
         user = User.objects.get(pk=userid)
+        detail_data['user'] = user
 
-    response_dir = {
-        'user': user,
-        'goods':goods
-    }
-
-    return render(request, 'goods_des/goods_des.html', context=response_dir)
+    return render(request, 'goods_des/goods_des.html', context=detail_data)
 
 # def addcart(request):
 #     # 获取token
@@ -240,7 +266,5 @@ def changecarteslect(request):
     return JsonResponse(response_data)
 
 
-def addok(request):
-    return HttpResponse('添加购物车成功')
 
 

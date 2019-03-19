@@ -8,28 +8,16 @@ $(function () {
         $.get('/axf/changecartselect/', request_data, function (response) {
             console.log(response)
         })
-
-        function total() {
+        $('.change_goods').click(function () {
             var sum = 0
+            var price = $(this).parent().prev().text()
+            var number = $(this).parent().prev().prev().text()
 
-            $('.cart_pro th').each(function () {
-                var $confirm = $(this).find('.change_goods')
-                var $content = $(this).find('.cart_pro')
-
-            if ($confirm.find('.glyphicon').length){
-                var price = $content.find('.price').attr('data-price')
-                var num = $content.find('.num').attr('data-number')
-
-                sum += num * price
-            }
+            sum += number * price
+            $('.cart_price_block').html(sum)
+        })
 
 
-
-            })
-
-            $('.cart_price .p').html(sum)
-
-        }
 
     })
 })

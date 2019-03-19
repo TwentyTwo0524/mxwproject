@@ -335,41 +335,44 @@
 			</div>
 		</div>
 		<!-- 内容 -->
-		<div class="content">
+        <div class="content">
 			<div class="goods_info">
 				<div class="pro_l">
-                    {% for good in goods %}
-                        <div>
-                            <img src="{{ good.productimg }}">
-                        </div>
-                    {% endfor %}
+					<div class="pro_img_list">
+						<ul class="goods_list">
+                            <li>
+                                <img src="{{ goods.productimg }}">
+                            </li>
+						</ul>
+					</div>
+{#					<div class="pro_img">#}
+{#						<div class="smallArea"></div>#}
+{#						<div class="bigArea">#}
+{#							<img class="bigImg" src="../img/showImg1.jpg">#}
+{#						</div>#}
+{#					</div>#}
 				</div>
 
 
 				<div class="pro_r">
 					<!--品牌以及商品标题-->
-
 					<h1 class="relative">
-                        {% for good in goods %}
-                             <a class="c_purple" href="" target="_blank" title="了解品牌">{{ good.productname }}</a>
-                             <br>
-                             <span>{{ good.productlongname }}</span>
-                        {% endfor %}
+						 <a class="c_purple" href='' target="_blank" title="了解品牌">{{ goods.productname }}</a>
+               			 <br />
+               			 <span>{{ goods.productlongname }} </span>
 					</h1>
 					<!--参考价格-->
 					<div class="position_rel">
 						<div class="pro_price">
 							<p>
-								<s class="c_gray_2">参考价：￥10850.00</s><br>
-								</p><div style="position:relative;">
-									<span class="c_purple">
-									<br>
-                                        {% for good in goods %}
-									活动价：<span class="price">￥{{ good.price }}</span>
-                                        {% endfor %}
-                                    </span>
+								<s class="c_gray_2">参考价：￥10850.00</s><br />
+								<div style="position:relative;">
+									<span class=c_purple>
+									<br />
+									活动价：<span class="price">￥{{ goods.price }}</span>
+									</span>
 								</div>
-							<p></p>
+							</p>
 							<div style="margin-top:20px;">
            	             		 <p>
            	             		 	到货时间：该商品到货时间预计3-5个工作日
@@ -378,18 +381,70 @@
 						</div>
 					</div>
 					<div class="pro_btn">
-                        {% for goods in goods %}
-                            <img class="buy" src="{% static 'home/img/buy.gif'%}">
-                            <div>
-                                <img class="bags" data_goodsid="{{ goods.productid }}" src="{% static 'home/img/bags.gif'%}">
-                            </div>
-                        {% endfor %}
+						<img class="buy" src="{% static 'goods_des/img/buy.gif' %}">
+						<img class="bags" data_goodsid="{{ goods.productid }}" src="{% static 'home/img/bags.gif'%}">
 					</div>
 					<div class="pro_con">
+
 					</div>
 				</div>
 			</div>
 		</div>
+{#		<div class="content">#}
+{#			<div class="goods_info">#}
+{#				<div class="pro_l">#}
+{#                    {% for good in goods %}#}
+{#                        <div>#}
+{#                            <img src="{{ good.productimg }}">#}
+{#                        </div>#}
+{#                    {% endfor %}#}
+{#				</div>#}
+{##}
+{##}
+{#				<div class="pro_r">#}
+{#					<!--品牌以及商品标题-->#}
+{##}
+{#					<h1 class="relative">#}
+{#                        {% for good in goods %}#}
+{#                             <a class="c_purple" href="" target="_blank" title="了解品牌">{{ good.productname }}</a>#}
+{#                             <br>#}
+{#                             <span>{{ good.productlongname }}</span>#}
+{#                        {% endfor %}#}
+{#					</h1>#}
+{#					<!--参考价格-->#}
+{#					<div class="position_rel">#}
+{#						<div class="pro_price">#}
+{#							<p>#}
+{#								<s class="c_gray_2">参考价：￥10850.00</s><br>#}
+{#								</p><div style="position:relative;">#}
+{#									<span class="c_purple">#}
+{#									<br>#}
+{#                                        {% for good in goods %}#}
+{#									活动价：<span class="price">￥{{ good.price }}</span>#}
+{#                                        {% endfor %}#}
+{#                                    </span>#}
+{#								</div>#}
+{#							<p></p>#}
+{#							<div style="margin-top:20px;">#}
+{#           	             		 <p>#}
+{#           	             		 	到货时间：该商品到货时间预计3-5个工作日#}
+{#           	             		 </p>#}
+{#                            </div>#}
+{#						</div>#}
+{#					</div>#}
+{#					<div class="pro_btn">#}
+{#                        {% for goods in goods %}#}
+{#                            <img class="buy" src="{% static 'home/img/buy.gif'%}">#}
+{#                            <div>#}
+{#                                <img class="bags" data_goodsid="{{ goods.productid }}" src="{% static 'home/img/bags.gif'%}">#}
+{#                            </div>#}
+{#                        {% endfor %}#}
+{#					</div>#}
+{#					<div class="pro_con">#}
+{#					</div>#}
+{#				</div>#}
+{#			</div>#}
+{#		</div>#}
 		<!--  公共尾部  -->
 		<div class="footer">
 			<div class="help">

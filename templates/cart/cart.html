@@ -66,25 +66,28 @@
 						<span class="goods_success"></span>
 					</div>
 				</div>
-                {% for cart in carts %}
-                    <div class='cart_pro'>
-                        <table width='100%'>
-                            <tr><th>商品图片</th><th>商品名称</th><th>数量</th><th>单价</th><th>操作</th></tr>
-                            <tr>
-                                <th><img src="{{ cart.goods.productimg }}" style="height: 100px;width: 100px;"></th>
-                                <th>{{ cart.goods.productlongname }}</th>
-                                <th class="number" data-number="{{ cart.number }}">{{ cart.number }}</th>
-                                <th class="price" data-price="{{ cart.goods.price }}">{{ cart.goods.price }}</th>
-                                <th><input type="checkbox" class="change_goods" data-cardid="{{ cart.id }}"></th>
-                            </tr>
-                        </table>
-                    </div>
-                    </div>
+
+                <div class='cart_pro'>
+                    <table width='100%'>
+                        <tr><th>商品图片</th><th>商品名称</th><th>数量</th><th>单价</th><th>操作</th></tr>
+                        {% for cart in carts %}
+                        <tr class="changeone">
+                            <th><img src="{{ cart.goods.productimg }}" style="height: 100px;width: 100px;"></th>
+                            <th>{{ cart.goods.productlongname }}</th>
+                            <th class="number" data-number="{{ cart.number }}">{{ cart.number }}</th>
+                            <th class="price" data-price="{{ cart.goods.price }}">{{ cart.goods.price }}</th>
+                            <th><input type="checkbox" class="change_goods" data-cardid="{{ cart.id }}"></th>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                </div>
+
                     <div class='cart_price'>
-                        <p>总计（不含运费）：</p>
-                        <span class='pay_goods' ></span>
+                        <p>总计（不含运费）：<span class="cart_price_block"></span></p>
+                        <span class='pay_goods'></span>
                     </div>
-                {% endfor %}
+
 				<div class='pay'>
 					<button></button>
 				</div>
@@ -96,141 +99,142 @@
 {#			</div>#}
 		</div>
 
-		<script type="text/javascript">
-
-			function refreshCart() {
-
-				$(".goods_tr").remove()
-
-				var goodslist = $.cookie("cart");
-				if(goodslist){
-					goodslist=JSON.parse($.cookie("cart"))
-					var priceArr=[];
-					for(var i=0;i<goodslist.length;i++){
-
-						var obj=goodslist[i];
-						var price=JSON.parse(obj.price)*obj.num;
-						priceArr.push(price)
-//						console.log(priceArr)
-						var priceSum=0;
-						for(var j=0;j<priceArr.length;j++){
-
-							priceSum+=priceArr[j];
-						}
-//						console.log(priceSum)
-						$(".pay_goods").html("￥"+priceSum)
-						$(".cart_none").remove()
-						$(".cart_success").show();
-						$(".goods_success").html("成功加入 "+obj.name+" 商品到购物车")
-						var tbody=$("<tr class='goods_tr'></tr>")
-						var t_img=$("<td class='t_img'><a href=''><img id="+ i +" src="+obj.img+"></a></td>")
-						var t_name=$("<td class='cart_pro_name'><a href=''>"+obj.name+"</a></td>")
-						var t_num=$("<td><button class='sub'>-</button><span class='num'>"+obj.num+"</span><button class='add'>+</button></td>")
-						var t_price=$("<td>￥"+obj.price+"</td>")
-						var t_delet=$("<td class='delet_td'><a>移至收藏</a><br/><a class='delet_goods'>删除商品</a></td>")
-						tbody.append(t_img,t_name,t_num,t_price,t_delet)
-						$("table").append(tbody)
-
-
-					}
-				}
-			}
-
-			$(function(){
-
-
-				refreshCart()
-
-
-				$(".content").on("click",".sub", function(){
-
-					goodslist_sub=JSON.parse($.cookie("cart"))
-
-					for(var i=0;i<goodslist_sub.length;i++){
-						var obj=goodslist_sub[i];
-
-							if($(this).parent().siblings(".cart_pro_name").find("a").html()==obj.name){
-							if(obj.num>1){
-								obj.num--;
-							}
-							}
-
-					}
-					$.cookie("cart",JSON.stringify(goodslist_sub),{expires:10,path:"/"})
-					refreshCart();
-					console.log($.cookie("cart"))
-				})
-
-				$(".content").on("click",".add",function(){
-					goodslist_add=JSON.parse($.cookie("cart"))
-					for(var i=0;i<goodslist_add.length;i++){
-						var obj=goodslist_add[i];
-//						console.log(obj)
-
-						if($(this).parent().siblings(".cart_pro_name").find("a").html()==obj.name){
-							obj.num++;
-							if(obj.num>99){
-								obj.num=99
-								alert("库存不足")
-							}
-						}
-					}
-					$.cookie("cart",JSON.stringify(goodslist_add),{expires:10,path:"/"})
-					refreshCart();
-				})
-
-				$(".content").on("click",".delet_goods",function(){
-					goodslist_delet=JSON.parse($.cookie("cart"))
-//					console.log(goodslist_delet.length)
-					for(var i=0;i<goodslist_delet.length;i++){
-//						goodslist_delet[i].index=i;
-//						console.log(i)
-						var obj=goodslist_delet[i];
-						if($(this).parent().siblings(".t_img").find("img").attr("id")==(obj.id-1)){
-							goodslist_delet.splice($(this).parent().siblings(".t_img").find("img").attr("id"),1);
-							console.log(obj.id-1)
-							console.log($(this).parent().siblings(".t_img").find("img").attr("id"))
-							console.log(goodslist_delet)
-						}
-						else{
-							goodslist_delet.splice(($(this).parent().siblings(".t_img").find("img").attr("id"))-1,1);
-						}
-					}
-					$.cookie("cart",JSON.stringify(goodslist_delet),{expires:10,path:"/"})
-					window.location.reload()
-					console.log(JSON.parse($.cookie("cart")))
-				})
-
-
-				$(".content").on("click",".pay button",function(){
-					$(".all").show()
-					$(".pay_success").show()
-				})
-				$(".true").click(function(){
-					$(".success").show()
-					$(".pay_success").hide()
-				})
-				$(".false").click(function(){
-					$(".all").hide()
-					$(".pay_success").hide()
-				})
-				$(".back").click(function(){
-					$(".all").hide()
-					$(".success").hide();
-					$.cookie("cart",null,{expires:0,path:"/"})
-					$(".cart_success").remove()
-					window.location.reload(true);
-				})
-
-			})
-		</script>
-		<div class="all"></div>
-		<div class="success">
-			支付成功!
-			<p class="back">返回购物车<< </p>
-		</div>
-		<div class="pay_success">
-            </div>
+{#		<script type="text/javascript">#}
+{##}
+{#			function refreshCart() {#}
+{##}
+{#				$(".goods_tr").remove()#}
+{##}
+{#				var goodslist = $.cookie("cart");#}
+{#				if(goodslist){#}
+{#					goodslist=JSON.parse($.cookie("cart"))#}
+{#					var priceArr=[];#}
+{#					for(var i=0;i<goodslist.length;i++){#}
+{##}
+{#						var obj=goodslist[i];#}
+{#						var price=JSON.parse(obj.price)*obj.num;#}
+{#						priceArr.push(price)#}
+{#//						console.log(priceArr)#}
+{#						var priceSum=0;#}
+{#						for(var j=0;j<priceArr.length;j++){#}
+{##}
+{#							priceSum+=priceArr[j];#}
+{#						}#}
+{#//						console.log(priceSum)#}
+{#						$(".pay_goods").html("￥"+priceSum)#}
+{#						$(".cart_none").remo#}
+{# ()#}
+{#						$(".cart_success").show();#}
+{#						$(".goods_success").html("成功加入 "+obj.name+" 商品到购物车")#}
+{#						var tbody=$("<tr class='goods_tr'></tr>")#}
+{#						var t_img=$("<td class='t_img'><a href=''><img id="+ i +" src="+obj.img+"></a></td>")#}
+{#						var t_name=$("<td class='cart_pro_name'><a href=''>"+obj.name+"</a></td>")#}
+{#						var t_num=$("<td><button class='sub'>-</button><span class='num'>"+obj.num+"</span><button class='add'>+</button></td>")#}
+{#						var t_price=$("<td>￥"+obj.price+"</td>")#}
+{#						var t_delet=$("<td class='delet_td'><a>移至收藏</a><br/><a class='delet_goods'>删除商品</a></td>")#}
+{#						tbody.append(t_img,t_name,t_num,t_price,t_delet)#}
+{#						$("table").append(tbody)#}
+{##}
+{##}
+{#					}#}
+{#				}#}
+{#			}#}
+{##}
+{#			$(function(){#}
+{##}
+{##}
+{#				refreshCart()#}
+{##}
+{##}
+{#				$(".content").on("click",".sub", function(){#}
+{##}
+{#					goodslist_sub=JSON.parse($.cookie("cart"))#}
+{##}
+{#					for(var i=0;i<goodslist_sub.length;i++){#}
+{#						var obj=goodslist_sub[i];#}
+{##}
+{#							if($(this).parent().siblings(".cart_pro_name").find("a").html()==obj.name){#}
+{#							if(obj.num>1){#}
+{#								obj.num--;#}
+{#							}#}
+{#							}#}
+{##}
+{#					}#}
+{#					$.cookie("cart",JSON.stringify(goodslist_sub),{expires:10,path:"/"})#}
+{#					refreshCart();#}
+{#					console.log($.cookie("cart"))#}
+{#				})#}
+{##}
+{#				$(".content").on("click",".add",function(){#}
+{#					goodslist_add=JSON.parse($.cookie("cart"))#}
+{#					for(var i=0;i<goodslist_add.length;i++){#}
+{#						var obj=goodslist_add[i];#}
+{#//						console.log(obj)#}
+{##}
+{#						if($(this).parent().siblings(".cart_pro_name").find("a").html()==obj.name){#}
+{#							obj.num++;#}
+{#							if(obj.num>99){#}
+{#								obj.num=99#}
+{#								alert("库存不足")#}
+{#							}#}
+{#						}#}
+{#					}#}
+{#					$.cookie("cart",JSON.stringify(goodslist_add),{expires:10,path:"/"})#}
+{#					refreshCart();#}
+{#				})#}
+{##}
+{#				$(".content").on("click",".delet_goods",function(){#}
+{#					goodslist_delet=JSON.parse($.cookie("cart"))#}
+{#//					console.log(goodslist_delet.length)#}
+{#					for(var i=0;i<goodslist_delet.length;i++){#}
+{#//						goodslist_delet[i].index=i;#}
+{#//						console.log(i)#}
+{#						var obj=goodslist_delet[i];#}
+{#						if($(this).parent().siblings(".t_img").find("img").attr("id")==(obj.id-1)){#}
+{#							goodslist_delet.splice($(this).parent().siblings(".t_img").find("img").attr("id"),1);#}
+{#							console.log(obj.id-1)#}
+{#							console.log($(this).parent().siblings(".t_img").find("img").attr("id"))#}
+{#							console.log(goodslist_delet)#}
+{#						}#}
+{#						else{#}
+{#							goodslist_delet.splice(($(this).parent().siblings(".t_img").find("img").attr("id"))-1,1);#}
+{#						}#}
+{#					}#}
+{#					$.cookie("cart",JSON.stringify(goodslist_delet),{expires:10,path:"/"})#}
+{#					window.location.reload()#}
+{#					console.log(JSON.parse($.cookie("cart")))#}
+{#				})#}
+{##}
+{##}
+{#				$(".content").on("click",".pay button",function(){#}
+{#					$(".all").show()#}
+{#					$(".pay_success").show()#}
+{#				})#}
+{#				$(".true").click(function(){#}
+{#					$(".success").show()#}
+{#					$(".pay_success").hide()#}
+{#				})#}
+{#				$(".false").click(function(){#}
+{#					$(".all").hide()#}
+{#					$(".pay_success").hide()#}
+{#				})#}
+{#				$(".back").click(function(){#}
+{#					$(".all").hide()#}
+{#					$(".success").hide();#}
+{#					$.cookie("cart",null,{expires:0,path:"/"})#}
+{#					$(".cart_success").remove()#}
+{#					window.location.reload(true);#}
+{#				})#}
+{##}
+{#			})#}
+{#		</script>#}
+{#		<div class="all"></div>#}
+{#		<div class="success">#}
+{#			支付成功!#}
+{#			<p class="back">返回购物车<< </p>#}
+{#		</div>#}
+{#		<div class="pay_success">#}
+{#            </div>#}
 
 
 		<div class="footer">

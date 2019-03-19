@@ -489,6 +489,8 @@
 				<div class="theme">
 					<div class="mid_line"></div>
 					<p class="theme_n">
+                    </p>
+                </div>
 					<!--   商品推荐    -->
 			<div class="weekly">
 				<div class="theme">
@@ -501,7 +503,7 @@
 				</div>
 				<div class="home_large">
                         <div class="h1_float">
-                            <a href="{% url 'mxw:goods_des' %}" target="_blank">
+                            <a href="#" target="_blank">
                                 <img class="img_left" src="{% static 'home/img/goods1.jpg'%}">
                             </a>
                             <a href="">
@@ -522,6 +524,7 @@
                             </a>
                         </div>
 				</div>
+            </div>
 			</div>
 			<div class="weekly">
 				<div class="theme">
@@ -632,7 +635,6 @@
 					</p>
 				</div>
 				<div class="goods_scroll">
-
 					<div class="cart_pre">
 						<div class="m_pre"></div>
 					</div>
@@ -641,6 +643,14 @@
 					</div>
 					<!--<div class="scroll_pro">-->
 						<ul class="goods_scroll_ul">
+                            {% for goods in goods_list %}
+                                <li>
+                                    <a href="{% url 'mxw:goods_des' goods.productid%}">
+                                    <img src="{{ goods.productimg }}">
+                                    </a>
+                                </li>
+                            {% endfor %}
+
 						</ul>
 					<!--</div>-->
 				</div>
@@ -707,21 +717,21 @@
 				</div>
 			</div>
         </div>
-		<script type="text/javascript">
-			$(function(){
-				$(".float_search").focus(function(){
-					$(this).val("")
-					$(this).css("color","rgb(51,51,51)")
-				})
-				$(".float_search").blur(function(){
-					$(this).val("请填写您的E-mail")
-					$(this).css("color","#999")
-				})
-			})
-		</script>
+{#		<script type="text/javascript">#}
+{#			$(function(){#}
+{#				$(".float_search").focus(function(){#}
+{#					$(this).val("")#}
+{#					$(this).css("color","rgb(51,51,51)")#}
+{#				})#}
+{#				$(".float_search").blur(function(){#}
+{#					$(this).val("请填写您的E-mail")#}
+{#					$(this).css("color","#999")#}
+{#				})#}
+{#			})#}
+{#		</script>#}
 
 		<!--  公共尾部  -->
-		<div class="footer">
+        <div class="footer">
 			<div class="help">
 				<ul>
 					<li class="help_title">购物指南</li>

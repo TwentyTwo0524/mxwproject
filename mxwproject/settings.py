@@ -25,7 +25,7 @@ SECRET_KEY = 'kzo0*#iej$3yq=3d=z0zgp43kc$rsqe$qz+si#9iph24e-x1j3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -129,15 +129,15 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
 
-CACHES = {
-  "default": {
-      "BACKEND": "django_redis.cache.RedisCache",
-      # 配置redis的位置
-      # 配置主机地址、端口号、数据库
-      "LOCATION": "redis://127.0.0.1:6379/1",
-      "OPTIONS": {
-          "CLIENT_CLASS": "django_redis.client.DefaultClient",
-      }
-  }
-}
+# CACHES = {
+#   "default": {
+#       "BACKEND": "django_redis.cache.RedisCache",
+#       # 配置redis的位置
+#       # 配置主机地址、端口号、数据库
+#       "LOCATION": "redis://127.0.0.1:6379/1",
+#       "OPTIONS": {
+#           "CLIENT_CLASS": "django_redis.client.DefaultClient",
+#       }
+#   }
+# }
 
